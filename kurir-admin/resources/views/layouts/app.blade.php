@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title></title>
+	<title>Kurir-Admin</title>
 
 	<link href="{{ asset('css/general.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/bootstrap-datepicker3.min.css') }}" rel="stylesheet">

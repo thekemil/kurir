@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Kurir apps- Admin Login</title>
+  <title>Kurir</title>
 
   <link href="{{ asset('css/general.css') }}" rel="stylesheet">
   <script src="{{ asset('js/general.js') }}"></script>
