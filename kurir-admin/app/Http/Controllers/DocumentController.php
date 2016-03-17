@@ -21,7 +21,7 @@ class DocumentController extends Controller
 
   public function index()
   {
-    return view('Documents.index');
+    return view('documents.index');
   }
 
   public function document_data()
