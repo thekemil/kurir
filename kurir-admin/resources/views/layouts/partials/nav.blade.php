@@ -10,6 +10,11 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav">
+                <li class="{{ (Request::is('admin/customer') ? 'active' : '') }}">
+                   <a href="{!! route('admin.customer') !!}"><i class="fa fa-book"></i>Data Customers</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
                 <li class="{{ (Request::is('admin/branch') ? 'active' : '') }}">
                    <a href="{!! route('admin.branch') !!}"><i class="fa fa-book"></i>Data Cabang</a>
                 </li>
@@ -21,7 +26,12 @@
             </ul>
             <ul class="nav navbar-nav">
                 <li class="{{ (Request::is('admin/document') ? 'active' : '') }}">
-                   <a href="{!! route('admin.document') !!}"><i class="fa fa-book"></i>Data Dokumen</a>
+                   <a href="{!! route('admin.document.header') !!}"><i class="fa fa-book"></i>Transaksi Dokumen</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="{{ (Request::is('admin/document_type') ? 'active' : '') }}">
+                   <a href="{!! route('admin.document_type') !!}"><i class="fa fa-book"></i>Data Tipe Dokumen</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

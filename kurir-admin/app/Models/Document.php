@@ -8,7 +8,6 @@ class Document extends Model
 {
   protected $table = 'documents';
   protected $primarykey = 'id';
-  protected $fillable = array('trx','doc_name','no_doc','doc_address','doc_phone','doc_note','branch_id','doc_status','doc_name_received');
+  protected $fillable = array('trx','doc_name','no_doc','doc_address','doc_phone','doc_note','branch_id','doc_status','doc_name_received','document_header_id','document_type_id');
   protected $hidden = ['id','created_at', 'updated_at'];
-
 }

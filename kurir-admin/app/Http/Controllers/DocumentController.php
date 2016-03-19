@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 use Session;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
+use App\Models\DocumentHeader;
 use App\Models\Branch;
+
+
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 
 use Yajra\Datatables\Datatables;
@@ -24,22 +29,25 @@ class DocumentController extends Controller
     return view('documents.index');
   }
 
-  public function document_data()
+  public function document_data($id)
   {
-    \DB::statement(\DB::raw('set @rownum=0'));
+    
+	\DB::statement(\DB::raw('set @rownum=0'));
    
       $documents = \DB::table('documents')
     ->join('branches', 'documents.branch_id', '=', 'branches.id')
     ->select([\DB::raw('@rownum  := @rownum  + 1 AS rownum'),
       'documents.id as doc_id',
-      'no_doc',
-      'branches.name as branch_id',
-      'doc_name as doc_name',
-      'doc_name_received as doc_name_received',
-      'doc_address as doc_address',
-      'doc_phone as doc_phone',
-	  'doc_status as doc_status'
-    ]);
+	  'documents.document_header_id as doc_head_id',
+      'documents.no_doc as no_doc',
+      'branches.name as branch_name',
+      'documents.doc_name as doc_name',
+      'documents.doc_name_received as doc_name_received',
+      'documents.doc_address as doc_address',
+      'documents.doc_phone as doc_phone',
+	  'documents.doc_status as doc_status'
+    ])
+	->where('documents.document_header_id','=',$id);
     return Datatables::of($documents)
     ->addColumn('doc_status', function ($document) {
    
@@ -55,9 +63,9 @@ class DocumentController extends Controller
 	    return   '
 	      <span class="label label-success">Received</span>
 	      ';
-	  }else if ($document->doc_status == 'failed') {
+	  } else if ($document->doc_status == 'failed') {
 	    return   '
-	      <span class="label label-success">Received</span>
+	      <span class="label label-danger">Gagal dikirim</span>
 	      ';
 	  } else {
 	    return   '
@@ -69,7 +77,7 @@ class DocumentController extends Controller
       return
       '
       <div class="col-md-9">
-      <a href="./document/edit/'.$document->doc_id.'" class="inline btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+      <a href="/admin/document/edit/'.$document->doc_id.'" class="inline btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>
       </div>
       ';
     })
@@ -83,9 +91,19 @@ class DocumentController extends Controller
   *
   * @return \Illuminate\Http\Response
   */
-  public function create()
+  public function create($id)
   {
-    return view('documents.create');
+      $document_by_customer = DocumentHeader::where('document_headers.id','=', $id)
+	  ->join('customers', 'customers.id', '=', 'document_headers.customer_id')
+      ->select('document_headers.*','customers.*')
+      ->first();
+	  
+	  // dd($document_by_customer->name);
+  //  die();
+	  
+ 	
+    // return view('documents.create');
+	return view('documents.create',compact(['id','document_by_customer']));
   }
 
   /**
@@ -102,7 +120,7 @@ class DocumentController extends Controller
     Document::create($document);
     Session::flash('flash_message', 'Data dokumen berhasil ditambahkan!');
     
-    return redirect('admin/document');
+	return Redirect::to(URL::previous() . "#docs-table");
   }
 
   /**
@@ -138,14 +156,13 @@ class DocumentController extends Controller
   */
   public function update(Request $request, $id)
   {
-
     $documentUpdate=$request->input();
     $document=Document::find($id);
     $document->update($documentUpdate);
 
     Session::flash('flash_message', 'Data dokumen berhasil diupdate!');
 
-    return redirect('admin/document');
+    return redirect('/admin/document/create/'.$request->input('document_header_id'));
   }
 
   public function delete_document(Request $request, $id)

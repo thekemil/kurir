@@ -20,6 +20,8 @@
     <div class="form-group">
       {!! Form::label('no_doc', 'Nomor Dokumen:') !!}
       {!! Form::text('no_doc',null,['class'=>'form-control']) !!}
+	  
+	  {!! Form::hidden('document_header_id',null,['class'=>'form-control']) !!}
     </div>
     <div class="form-group">
       {!! Form::label('doc_name', 'Nama Dokumen:') !!}
@@ -44,6 +46,16 @@
    <div class="form-group">
     {!! Form::label('doc_note', 'Catatan:') !!}
     {!! Form::textarea('doc_note',null,['class'=>'form-control','size'=>'2x3']) !!}
+    </div>
+    <div class="form-group">
+        {!! Form::label('doc_status', 'Status Pengiriman:') !!}
+        {!! Form::select('doc_status', [
+				'on_packing' => 'Packing',
+				'on_kurir' => 'Sending',
+       		 	'on_customer' => 'Received by Customer',
+				'failed' => 'Gagal Dikirim'],
+         null, ['class'=>'form-control']
+				) !!}
     </div>
 </div>
 </div>

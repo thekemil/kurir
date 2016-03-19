@@ -83,17 +83,40 @@ Route::group(array('prefix' => 'admin'),function() {
       'roles' => ['Admin', 'Owner']
   ]);
 
-  Route::get('documents', [
+  Route::get('documentss/{id}', [
       'middleware' => ['auth', 'roles'],
-      'as' => 'data.document',
+      'as' => 'data.document.create',
       'uses' => 'DocumentController@document_data',
       'roles' => ['Admin', 'Owner']
   ]);
+	  
+  Route::get('document', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.document.header',
+      'uses' => 'DocumentHeaderController@header',
+      'roles' => ['Admin', 'Owner']
+  ]);
 
-  Route::get('document/create', [
+  Route::get('documents', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'data.document.header',
+      'uses' => 'DocumentHeaderController@document_header_data',
+      'roles' => ['Admin', 'Owner']
+  ]);
+		  
+		  
+
+  Route::get('document/create/{id}', [
       'middleware' => ['auth', 'roles'],
       'as' => 'admin.document.create',
       'uses' => 'DocumentController@create',
+      'roles' => ['Admin', 'Owner']
+  ]);
+	  
+  Route::get('document/header/create', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.document.header.create',
+      'uses' => 'DocumentHeaderController@create',
       'roles' => ['Admin', 'Owner']
   ]);
 
@@ -103,6 +126,12 @@ Route::group(array('prefix' => 'admin'),function() {
       'uses' => 'DocumentController@store',
       'roles' => ['Admin', 'Owner']
   ]);
+	  Route::post('document/header/store', [
+	      'middleware' => ['auth', 'roles'],
+	      'as' => 'admin.document.header.store',
+	      'uses' => 'DocumentHeaderController@store',
+	      'roles' => ['Admin', 'Owner']
+	  ]);
 
   Route::get('document/edit/{id}', [
       'middleware' => ['auth', 'roles'],
@@ -110,11 +139,32 @@ Route::group(array('prefix' => 'admin'),function() {
       'uses' => 'DocumentController@edit',
       'roles' => ['Admin', 'Owner']
   ]);
+  
+  Route::get('document/header/edit/{id}', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.document.header.edit',
+      'uses' => 'DocumentHeaderController@edit',
+      'roles' => ['Admin', 'Owner']
+  ]);
+		  
+  Route::get('document/create/{id}', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.document.detail.create',
+      'uses' => 'DocumentController@create',
+      'roles' => ['Admin', 'Owner']
+  ]);
 
   Route::patch('document/update/{id}', [
       'middleware' => ['auth', 'roles'],
       'as' => 'admin.document.update',
       'uses' => 'DocumentController@update',
+      'roles' => ['Admin', 'Owner']
+  ]);
+	  
+  Route::patch('document/header/update/{id}', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.document.header.update',
+      'uses' => 'DocumentHeaderController@update',
       'roles' => ['Admin', 'Owner']
   ]);
 
@@ -131,6 +181,20 @@ Route::group(array('prefix' => 'admin'),function() {
        'uses' => 'DocumentController@branch_autocomplete',
        'roles' => ['Admin', 'Owner']
    ]);
+	   
+   Route::get('customer/autocomplete', [
+        'middleware' => ['auth', 'roles'],
+        'as' => 'admin.customer.autocomplete',
+        'uses' => 'CustomerController@customer_autocomplete',
+        'roles' => ['Admin', 'Owner']
+    ]);
+			
+   Route::get('document_type/autocomplete', [
+        'middleware' => ['auth', 'roles'],
+        'as' => 'admin.document_type.autocomplete',
+        'uses' => 'DocumentTypeController@doctype_autocomplete',
+        'roles' => ['Admin', 'Owner']
+    ]);
 
   //end document
 
@@ -182,6 +246,111 @@ Route::group(array('prefix' => 'admin'),function() {
       'uses' => 'UserController@destroy',
       'roles' => ['Admin','Owner']
   ]);
+	  
+  #end pengguna
+  
+  Route::get('customer', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.customer',
+      'uses' => 'CustomerController@index',
+      'roles' => ['Admin', 'Owner']
+  ]);
+
+  Route::get('customers', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'data.customer',
+      'uses' => 'CustomerController@customer_data',
+      'roles' => ['Admin', 'Owner']
+  ]);
+
+  Route::get('customer/create', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.customer.create',
+      'uses' => 'CustomerController@create',
+      'roles' => ['Admin', 'Owner']
+  ]);
+
+  Route::post('customer/store', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.customer.store',
+      'uses' => 'CustomerController@store',
+      'roles' => ['Admin', 'Owner']
+  ]);
+
+  Route::get('customer/edit/{id}', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.customer.edit',
+      'uses' => 'CustomerController@edit',
+      'roles' => ['Admin', 'Owner']
+  ]);
+
+  Route::patch('customer/update/{id}', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.customer.update',
+      'uses' => 'CustomerController@update',
+      'roles' => ['Admin', 'Owner']
+  ]);
+
+  Route::patch('customer/delete_customer/{id}', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'admin.customer.delete',
+      'uses' => 'CustomerController@delete_customer',
+      'roles' => ['Admin', 'Owner']
+  ]);
+
+// end customer
+
+
+	Route::get('document_type', [
+	    'middleware' => ['auth', 'roles'],
+	    'as' => 'admin.document_type',
+	    'uses' => 'DocumentTypeController@index',
+	    'roles' => ['Admin', 'Owner']
+	]);
+
+	Route::get('document_types', [
+	    'middleware' => ['auth', 'roles'],
+	    'as' => 'data.document_type',
+	    'uses' => 'DocumentTypeController@document_type_data',
+	    'roles' => ['Admin', 'Owner']
+	]);
+
+	Route::get('document_type/create', [
+	    'middleware' => ['auth', 'roles'],
+	    'as' => 'admin.document_type.create',
+	    'uses' => 'DocumentTypeController@create',
+	    'roles' => ['Admin', 'Owner']
+	]);
+
+	Route::post('document_type/store', [
+	    'middleware' => ['auth', 'roles'],
+	    'as' => 'admin.document_type.store',
+	    'uses' => 'DocumentTypeController@store',
+	    'roles' => ['Admin', 'Owner']
+	]);
+
+	Route::get('document_type/edit/{id}', [
+	    'middleware' => ['auth', 'roles'],
+	    'as' => 'admin.document_type.edit',
+	    'uses' => 'DocumentTypeController@edit',
+	    'roles' => ['Admin', 'Owner']
+	]);
+
+	Route::patch('document_type/update/{id}', [
+	    'middleware' => ['auth', 'roles'],
+	    'as' => 'admin.document_type.update',
+	    'uses' => 'DocumentTypeController@update',
+	    'roles' => ['Admin', 'Owner']
+	]);
+
+	Route::patch('document_type/delete_customer/{id}', [
+	    'middleware' => ['auth', 'roles'],
+	    'as' => 'admin.document_type.delete',
+	    'uses' => 'DocumentTypeController@delete_customer',
+	    'roles' => ['Admin', 'Owner']
+	]);
+	
+//end document type
 
 
 
