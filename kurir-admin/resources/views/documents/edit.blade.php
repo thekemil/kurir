@@ -13,6 +13,13 @@
     {!! Form::hidden('branch_id',$branch->id,['id'=>'branch_id', 'class'=>'form-control']) !!}
   </div>
 </div>
+<div class="col-md-4">
+  <div class="form-group">
+    {!! Form::label('document_type_id', 'Tipe Dokumen:') !!}
+    {!! Form::text('doctype',$doctype->name,['id'=>'doctype', 'class'=>'form-control','placeholder'=>'Input nama tipe dokumen']) !!}
+    {!! Form::hidden('document_type_id',$doctype->id,['id'=>'document_type_id', 'class'=>'form-control']) !!}
+  </div>
+</div>
 </div>
 <hr/>
 <div class="row">
@@ -71,7 +78,68 @@
 <script>
   $(document).ready(function() {
     autocomplete_branch();
+	autocomplete_doc_type();
   });
+  
+  function autocomplete_doc_type(){
+    var substringMatcher = function(strs) {
+      return function findMatches(q, cb) {
+        var matches, substringRegex;
+        matches = [];
+        substrRegex = new RegExp(q, 'i');
+        $.each(strs, function(i, str) {
+          if (substrRegex.test(str)) {
+            matches.push(str);
+          }
+        });
+        cb(matches);
+      };
+    };
+
+    var arr1 = [];
+    $("#doctype").typeahead({
+      hint: false,
+      highlight: true,
+      minLength: 2
+
+    },
+    {
+      limit: 50,
+      async: true,
+      templates: {notFound:"Data not found"},
+      source: function (query, processSync, processAsync) {
+        return $.ajax({
+          url: '{!! route("admin.document_type.autocomplete") !!}',
+          type: 'GET',
+          data: {"term": query},
+          dataType: 'json',
+          success: function (json) {
+            var _tmp_arr = [];
+            json.map(function(item){
+              _tmp_arr.push(item.name)
+              arr1.push({id: item.id, st: item.name, st_a: item.code})
+            })
+            return processAsync(_tmp_arr);
+          }
+        });
+      }
+    })
+    $("#doctype").on('typeahead:selected', function (e, code) {
+      arr1.map(function(i){
+        if (i.st == code){
+          $("#document_type_id").val(i.id);
+        }
+      })
+
+      if(e.keyCode==13){
+        arr1.map(function(i){
+          if (i.st == code){
+            $("#document_type_id").val(i.id);
+          }
+        })
+      }
+    })
+  }
 
   function autocomplete_branch(){
     var substringMatcher = function(strs) {

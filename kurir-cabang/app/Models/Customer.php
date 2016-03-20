@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Customer extends Model
+{
+  protected $table = 'customers';
+  protected $primarykey = 'id';
+  protected $fillable = array('name','code','address','pic_phone','pic_name');
+  protected $hidden = ['id', 'created_at', 'updated_at'];
+
+}

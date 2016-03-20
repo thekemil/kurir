@@ -24,6 +24,20 @@ Route::group(array('prefix' => 'branch'),function() {
       'uses' => 'DocumentController@index',
       'roles' => ['spv', 'branch']
   ]);
+	  
+  Route::get('document/header', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'branch.document.header',
+      'uses' => 'DocumentController@header',
+      'roles' => ['spv', 'branch']
+  ]);
+	  
+  Route::post('document/find_header', [
+      'middleware' => ['auth', 'roles'],
+      'as' => 'branch.document.find_header',
+      'uses' => 'DocumentController@find_header',
+      'roles' => ['spv', 'branch']
+  ]);
 
   Route::get('documents', [
       'middleware' => ['auth', 'roles'],
@@ -75,6 +89,4 @@ Route::group(array('prefix' => 'branch'),function() {
    ]);
 
   //end document
-
-
 });  

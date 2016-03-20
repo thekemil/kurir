@@ -5,8 +5,11 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <li class="{{ (Request::is('branch/document/header') ? 'active' : '') }}">
+                   <a href="{!! route('branch.document.header') !!}"><i class="fa fa-book"></i>Data Penerimaan Dokumen</a>
+                </li>
                 <li class="{{ (Request::is('branch/document') ? 'active' : '') }}">
-                   <a href="{!! route('branch.document') !!}"><i class="fa fa-book"></i>Data Dokumen</a>
+                   <a href="{!! route('branch.document') !!}"><i class="fa fa-book"></i>Data Tracking Dokumen</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

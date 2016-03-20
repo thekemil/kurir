@@ -7,6 +7,8 @@ use Session;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Models\Branch;
+use App\Models\DocumentType;
+use App\Models\DocumentHeader;
 
 use Auth;
 use Yajra\Datatables\Datatables;
@@ -22,6 +24,40 @@ class DocumentController extends Controller
   public function index()
   {
     return view('documents.index');
+  }
+  
+  public function header()
+  {	
+	  $result = '';
+      return view('documents.header', compact('result'));
+  }
+  
+  public function find_header(Request $request)
+  {
+	  $name = $request->input('term');
+	  
+      $data_inv = DocumentHeader::where('document_headers.invoice_delivery','=', $name)
+		  ->where('document_headers.status_inv_delivery','=','pending')
+      ->select('document_headers.*')
+      ->first();
+	  
+	  if (Count($data_inv) == 0) {
+		  $result = '<span class="label label-danger">Uppsss... Nomor Invoice pengiriman tidak ditemukan</span>';
+		  
+	  } else {
+		  $request->merge(array('status_inv_delivery'=>'received','date_inv_delivery'=>date("Y-m-d H:i:s")));
+		 
+	      $documentUpdate=$request->input();
+		 
+	      $document=DocumentHeader::find($data_inv->id);
+	      $document->update($documentUpdate);
+		  
+		  $result = '<span class="label label-success">Terima kasih, Nomor Invoice pengiriman berhasil di approve</span>';
+	  }
+	  
+
+      return view('documents.header', compact('result'));
+	  
   }
 
   public function document_data()
@@ -58,7 +94,7 @@ class DocumentController extends Controller
 		      ';
 		  }else if ($document->doc_status == 'failed') {
 		    return   '
-		      <span class="label label-success">Received</span>
+		      <span class="label label-danger">Gagal dikirim</span>
 		      ';
 		  } else {
 		    return   '
@@ -125,9 +161,11 @@ class DocumentController extends Controller
   */
   public function edit($id)
   {
-    $document =Document::find($id);
+    $document = Document::find($id);
     $branch = Branch::where('id', '=', $document->branch_id)->first();
-    return view('documents.edit',compact(['document','branch']));
+	$doctype = DocumentType::where('id', '=', $document->document_type_id)->first();
+	
+	return view('documents.edit',compact(['document','branch','doctype']));
   }
 
   /**

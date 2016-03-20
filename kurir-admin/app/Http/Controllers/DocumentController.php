@@ -7,6 +7,7 @@ use Session;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Models\DocumentHeader;
+use App\Models\DocumentType;
 use App\Models\Branch;
 
 
@@ -144,7 +145,9 @@ class DocumentController extends Controller
   {
     $document =Document::find($id);
     $branch = Branch::where('id', '=', $document->branch_id)->first();
-    return view('documents.edit',compact(['document','branch']));
+    $doctype = DocumentType::where('id', '=', $document->document_type_id)->first();
+	
+    return view('documents.edit',compact(['document','branch','doctype']));
   }
 
   /**

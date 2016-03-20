@@ -13,6 +13,11 @@
     {!! Form::hidden('branch_id',$branch->id,['id'=>'branch_id', 'class'=>'form-control','readonly'=>'true']) !!}
   </div>
 </div>
+
+<div class="col-md-4">
+<label>Tipe Dokumen: <span class="label label-warning">{{$doctype->name}}</span></label>
+</div>
+
 </div>
 <hr/>
 <div class="row">
